@@ -1,23 +1,28 @@
 ﻿using NeocitiesApi.Models;
 using Newtonsoft.Json;
 using System;
+using System.IO;
 using System.Linq.Expressions;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace NeocitiesApi
 {
     public class NeocitiesApi
     {
-        private readonly string _apiKey;
         private readonly HttpClient _httpClient;
 
         public NeocitiesApi(string apiKey)
         {
-            _apiKey = apiKey;
             _httpClient = CreateHttpClient(apiKey);
+        }
+
+        public NeocitiesApi(string username, string password)
+        {
+            _httpClient = CreateHttpClient(username, password);
         }
 
         /// <summary>
@@ -66,6 +71,57 @@ namespace NeocitiesApi
         }
 
         /// <summary>
+        /// Retrieves the API key for the user's current site if the user provides the username
+        /// and password in order to use the Neocities API. The API will generate an API key
+        /// if this request is made and the website associated with the account doesn't have one.
+        /// </summary>
+        /// <returns>A <see cref="NeocitiesWebsiteApiKey"/> object containing the key</returns>
+        public async Task<NeocitiesWebsiteApiKey> GetWebsiteApiKeyAsync()
+        {
+            return await SendHttpGetRequestAsync<NeocitiesWebsiteApiKey>("key");
+        }
+
+        /// <summary>
+        /// Uploads a specified file from the local computer to the user's website
+        /// </summary>
+        /// <param name="filePathOnDisk">The complete path to the file on disk</param>
+        /// <returns><see cref="true"/> if the upload was successful, <see cref="false"/> otherwise</returns>
+        public async Task<bool> UploadFileToWebsiteAsync(string filePathOnDisk)
+        {
+            FileInfo fileToUpload = new FileInfo(filePathOnDisk);
+
+            var fileContent = new StreamContent(fileToUpload.OpenRead())
+            {
+                Headers =
+                {
+                    ContentLength = fileToUpload.Length,
+                    ContentType = new MediaTypeHeaderValue(fileToUpload.Extension)
+                }
+            };
+
+            var uploadContent = new MultipartFormDataContent();
+            uploadContent.Add(fileContent, fileToUpload.Name, fileToUpload.FullName);
+
+            var uploadResult = await _httpClient.PostAsync("upload", uploadContent);
+
+            return uploadResult.IsSuccessStatusCode;
+        }
+
+
+        /// <summary>
+        /// Deletes a file or number of files from the website
+        /// </summary>
+        /// <param name="files">A singular filename with extension or collection of filenames with extensions</param>
+        /// <returns><see cref="true"/> if the deletion was successful, <see cref="false"/> otherwise</returns>
+        public async Task<bool> DeleteFilesFromWebsiteAsync(params string[] files)
+        {
+            var deleteFiles = string.Join(",", files);
+            var deleteResult = await _httpClient.DeleteAsync($"delete?filenames[]={deleteFiles}");
+
+            return deleteResult.IsSuccessStatusCode;
+        }
+
+        /// <summary>
         /// Makes the request to the Neocities API
         /// </summary>
         /// <typeparam name="T">The data model expected from the API</typeparam>
@@ -90,7 +146,7 @@ namespace NeocitiesApi
         }
 
         /// <summary>
-        /// Creates a new http client for communicating with the Neocities API
+        /// Creates a new http client for communicating with the Neocities API with the website's API key
         /// </summary>
         /// <param name="apiKey">The site's API key</param>
         /// <returns>A <see cref="HttpClient"/> configured to work with the Neocities API</returns>
@@ -99,6 +155,20 @@ namespace NeocitiesApi
             var client = new HttpClient();
             client.BaseAddress = new Uri("https://neocities.org/api/");
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", apiKey);
+
+            return client;
+        }
+
+        /// <summary>
+        /// Creates a new http client for communicating with the Neocities API with the user's account
+        /// </summary>
+        /// <param name="username"></param>
+        /// <param name="password"></param>
+        /// <returns>A <see cref="HttpClient"/> configured to work with the Neocities API</returns>
+        private HttpClient CreateHttpClient(string username, string password)
+        {
+            var client = new HttpClient();
+            client.BaseAddress = new Uri($"https://{username}:{password}@neocities.org/api/");
 
             return client;
         }
