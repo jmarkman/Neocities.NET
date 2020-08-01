@@ -29,7 +29,6 @@ namespace NeocitiesApi
         /// <returns>A <see cref="NeocitiesFileList"/> object containing the files</returns>
         public async Task<NeocitiesFileList> GetWebsiteFileListAsync(string remotePath = "")
         {
-            NeocitiesFileList fileList;
             string urlParams;
 
             if (!string.IsNullOrWhiteSpace(remotePath))
@@ -41,18 +40,7 @@ namespace NeocitiesApi
                 urlParams = "list";
             }
 
-            var response = await _httpClient.GetAsync(urlParams);
-            if (response.IsSuccessStatusCode)
-            {
-                var data = await response.Content.ReadAsStringAsync();
-                fileList = JsonConvert.DeserializeObject<NeocitiesFileList>(data);
-            }
-            else
-            {
-                throw new WebException("Could not retrieve the list of files for the website");
-            }
-
-            return fileList;
+            return await SendHttpGetRequestAsync<NeocitiesFileList>(urlParams);
         }
 
         /// <summary>
@@ -63,7 +51,6 @@ namespace NeocitiesApi
         /// <returns>A <see cref="NeocitiesWebsiteInfo"/> object containing the site's metadata</returns>
         public async Task<NeocitiesWebsiteInfo> GetWebsiteMetaDataAsync(string siteName = "")
         {
-            NeocitiesWebsiteInfo info;
             string urlParams;
 
             if (!string.IsNullOrWhiteSpace(siteName))
@@ -75,18 +62,31 @@ namespace NeocitiesApi
                 urlParams = "info";
             }
 
+            return await SendHttpGetRequestAsync<NeocitiesWebsiteInfo>(urlParams);
+        }
+
+        /// <summary>
+        /// Makes the request to the Neocities API
+        /// </summary>
+        /// <typeparam name="T">The data model expected from the API</typeparam>
+        /// <param name="urlParams"></param>
+        /// <returns>The data model built from the API request</returns>
+        private async Task<T> SendHttpGetRequestAsync<T>(string urlParams)
+        {
+            T responseModel;
+
             var response = await _httpClient.GetAsync(urlParams);
             if (response.IsSuccessStatusCode)
             {
                 var data = await response.Content.ReadAsStringAsync();
-                info = JsonConvert.DeserializeObject<NeocitiesWebsiteInfo>(data);
+                responseModel = JsonConvert.DeserializeObject<T>(data);
             }
             else
             {
-                throw new WebException("Could not retrieve the metadata for the website");
+                throw new WebException($"Query failed! Response status code: {response.StatusCode}");
             }
 
-            return info;
+            return responseModel;
         }
 
         /// <summary>
