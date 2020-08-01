@@ -1,7 +1,9 @@
-﻿using System;
+﻿using NeocitiesApi.Models;
+using System;
 using System.Linq.Expressions;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Threading.Tasks;
 
 namespace NeocitiesApi
 {
@@ -16,7 +18,10 @@ namespace NeocitiesApi
             _httpClient = CreateHttpClient(apiKey);
         }
 
-        public 
+        public async Task<WebsiteFileList> GetWebsiteFileListAsync()
+        {
+
+        }
 
         /// <summary>
         /// Creates a new http client for communicating with the Neocities API
