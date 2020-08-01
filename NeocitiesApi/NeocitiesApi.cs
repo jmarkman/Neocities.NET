@@ -116,7 +116,8 @@ namespace NeocitiesApi
         public async Task<bool> DeleteFilesFromWebsiteAsync(params string[] files)
         {
             var deleteFiles = string.Join(",", files);
-            var deleteResult = await _httpClient.DeleteAsync($"delete?filenames[]={deleteFiles}");
+            var data = new StringContent(deleteFiles, Encoding.UTF8, "application/json");
+            var deleteResult = await _httpClient.PostAsync($"delete?filenames[]=", data);
 
             return deleteResult.IsSuccessStatusCode;
         }
