@@ -3,10 +3,8 @@ using Newtonsoft.Json;
 
 namespace NeocitiesApi.Models
 {
-    public class WebsiteFileList
+    public class NeocitiesFileList : NeocitiesWebsiteBase
     {
-        [JsonProperty("result")]
-        public string Result { get; set; }
         [JsonProperty("files")]
         public List<File> Files { get; set; }
     }

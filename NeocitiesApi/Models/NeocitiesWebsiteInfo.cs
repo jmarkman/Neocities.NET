@@ -3,10 +3,8 @@ using Newtonsoft.Json;
 
 namespace NeocitiesApi.Models
 {
-    public class WebsiteInfo
+    public class NeocitiesWebsiteInfo : NeocitiesWebsiteBase
     {
-        [JsonProperty("result")]
-        public string Result { get; set; }
         [JsonProperty("info")]
         public Attributes Attributes { get; set; }
     }

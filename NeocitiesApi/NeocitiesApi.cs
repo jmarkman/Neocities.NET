@@ -26,10 +26,10 @@ namespace NeocitiesApi
         /// in the specified folder will be retrieved.
         /// </summary>
         /// <param name="remotePath">A specific folder on the website backend</param>
-        /// <returns>A <see cref="WebsiteFileList"/> object containing the files</returns>
-        public async Task<WebsiteFileList> GetWebsiteFileListAsync(string remotePath = "")
+        /// <returns>A <see cref="NeocitiesFileList"/> object containing the files</returns>
+        public async Task<NeocitiesFileList> GetWebsiteFileListAsync(string remotePath = "")
         {
-            WebsiteFileList fileList;
+            NeocitiesFileList fileList;
             string urlParams;
 
             if (!string.IsNullOrWhiteSpace(remotePath))
@@ -45,7 +45,7 @@ namespace NeocitiesApi
             if (response.IsSuccessStatusCode)
             {
                 var data = await response.Content.ReadAsStringAsync();
-                fileList = JsonConvert.DeserializeObject<WebsiteFileList>(data);
+                fileList = JsonConvert.DeserializeObject<NeocitiesFileList>(data);
             }
             else
             {
@@ -60,10 +60,10 @@ namespace NeocitiesApi
         /// the metadata about the website associated with the API key will be retrieved.
         /// </summary>
         /// <param name="siteName">A specific site (i.e., the "foobar" from "foobar.neocities.org")</param>
-        /// <returns>A <see cref="WebsiteInfo"/> object containing the site's metadata</returns>
-        public async Task<WebsiteInfo> GetWebsiteMetaDataAsync(string siteName = "")
+        /// <returns>A <see cref="NeocitiesWebsiteInfo"/> object containing the site's metadata</returns>
+        public async Task<NeocitiesWebsiteInfo> GetWebsiteMetaDataAsync(string siteName = "")
         {
-            WebsiteInfo info;
+            NeocitiesWebsiteInfo info;
             string urlParams;
 
             if (!string.IsNullOrWhiteSpace(siteName))
@@ -79,7 +79,7 @@ namespace NeocitiesApi
             if (response.IsSuccessStatusCode)
             {
                 var data = await response.Content.ReadAsStringAsync();
-                info = JsonConvert.DeserializeObject<WebsiteInfo>(data);
+                info = JsonConvert.DeserializeObject<NeocitiesWebsiteInfo>(data);
             }
             else
             {
