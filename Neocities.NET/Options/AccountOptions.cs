@@ -8,8 +8,8 @@ namespace Neocities.NET
         [Option("addkey", Separator = ':', HelpText = "Add your website name and associated API key in the format [AccountName]:[API Key]")]
         public IEnumerable<string> AddApiKey { get; set; }
 
-        [Option("addacct", Separator = ':', HelpText = "Add your username and password in the format [AccountName]:[Password]")]
-        public IEnumerable<string> AddAccount { get; set; }
+        [Option("addpass", Separator = ':', HelpText = "Add your username and password in the format [AccountName]:[Password]")]
+        public IEnumerable<string> AddPassword { get; set; }
 
         [Option("updatekey", Separator = ':', HelpText = "Update the API key associated with the specified account in the format [AccountName]:[New API Key]")]
         public IEnumerable<string> UpdateApiKey { get; set; }

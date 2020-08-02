@@ -60,25 +60,51 @@ namespace Neocities.NET
 
         private static async Task<int> RunAccountCommand(AccountOptions acctOption)
         {
+            AccountCommands acctCommands = new AccountCommands();
+
             if (acctOption.AddApiKey.Count() > 1)
             {
-                // Add an account and associated api key
-                return 0;
+                var success = acctCommands.AddAccount(AccountSecurityType.APIKey, acctOption.AddApiKey.ToList());
+
+                if (success)
+                {
+                    return 0;
+                }
+
+                return 1;
             }
-            else if (acctOption.AddAccount.Count() > 1)
+            else if (acctOption.AddPassword.Count() > 1)
             {
-                // Add account and password
-                return 0;
+                var success = acctCommands.AddAccount(AccountSecurityType.Password, acctOption.AddApiKey.ToList());
+
+                if (success)
+                {
+                    return 0;
+                }
+
+                return 1;
             }
             else if (acctOption.UpdateApiKey.Count() > 1)
             {
-                // Update api key for account
-                return 0;
+                var success = acctCommands.UpdateAccount(AccountSecurityType.APIKey, acctOption.AddApiKey.ToList());
+
+                if (success)
+                {
+                    return 0;
+                }
+
+                return 1;
             }
             else if (acctOption.UpdatePassword.Count() > 1)
             {
-                // Update password for account
-                return 0;
+                var success = acctCommands.UpdateAccount(AccountSecurityType.Password, acctOption.AddApiKey.ToList());
+
+                if (success)
+                {
+                    return 0;
+                }
+
+                return 1;
             }
             else if (!string.IsNullOrWhiteSpace(acctOption.DeleteAccountInfo))
             {
