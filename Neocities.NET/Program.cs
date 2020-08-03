@@ -1,24 +1,26 @@
 ﻿using CommandLine;
-using System;
+using NeocitiesNET.AccountInteraction;
+using NeocitiesNET.Options;
 using System.Linq;
-using System.Threading.Tasks;
 
-namespace Neocities.NET
+namespace NeocitiesNET
 {
     class Program
     {
-        static async Task<int> Main(string[] args)
+        static int Main(string[] args)
         {
-            return await Parser.Default.ParseArguments<AccountOptions, ApiOptions>(args)
+            return Parser.Default.ParseArguments<AccountOptions, ApiOptions>(args)
                 .MapResult(
                     (AccountOptions acctOpts) => RunAccountCommand(acctOpts),
                     (ApiOptions apiOpts) => RunApiCommand(apiOpts),
-                    _ => Task.FromResult(1)
+                    _ => 1
                 );
         }
 
-        private static async Task<int> RunApiCommand(ApiOptions apiOption)
+        private static int RunApiCommand(ApiOptions apiOption)
         {
+            AccountCommands acctCommands = new AccountCommands();
+
             if (apiOption.ListAllFiles)
             {
                 // List all files on website
@@ -58,7 +60,7 @@ namespace Neocities.NET
             return 1;
         }
 
-        private static async Task<int> RunAccountCommand(AccountOptions acctOption)
+        private static int RunAccountCommand(AccountOptions acctOption)
         {
             AccountCommands acctCommands = new AccountCommands();
 
@@ -108,7 +110,7 @@ namespace Neocities.NET
             }
             else if (!string.IsNullOrWhiteSpace(acctOption.DeleteAccountInfo))
             {
-                // Delete account
+                acctCommands.DeleteAccount(acctOption.DeleteAccountInfo);
                 return 0;
             }
             else if (!string.IsNullOrWhiteSpace(acctOption.UseAccount))

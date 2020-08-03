@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.Serialization;
 
-namespace Neocities.NET
+namespace NeocitiesNET.AccountInteraction
 {
     public class AccountNotFoundException : Exception
     {

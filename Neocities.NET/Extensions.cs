@@ -1,8 +1,7 @@
-﻿using System;
+﻿using NeocitiesNET.AccountInteraction;
 using System.Collections.Generic;
-using System.Text;
 
-namespace Neocities.NET
+namespace NeocitiesNET
 {
     public static class Extensions
     {
@@ -17,6 +16,13 @@ namespace Neocities.NET
             }
 
             throw new AccountNotFoundException($"The account with name '{accountName}' could not be located in the sequence!");
+        }
+
+        public static void MoveAccountAtIndexTo(this List<Account> accounts, int accountIndex, int moveToIndex = 0)
+        {
+            Account acct = accounts[accountIndex];
+            accounts.RemoveAt(accountIndex);
+            accounts.Insert(moveToIndex, acct);
         }
     }
 }

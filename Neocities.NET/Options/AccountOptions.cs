@@ -1,7 +1,7 @@
 ﻿using CommandLine;
 using System.Collections.Generic;
 
-namespace Neocities.NET
+namespace NeocitiesNET.Options
 {
     public class AccountOptions
     {

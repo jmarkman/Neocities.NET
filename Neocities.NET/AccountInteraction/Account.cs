@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Neocities.NET
+namespace NeocitiesNET.AccountInteraction
 {
     public class Account
     {
@@ -19,12 +19,12 @@ namespace Neocities.NET
         /// <summary>
         /// The password associated with this account
         /// </summary>
-        public string Password { get; set; }
+        public string Password { get; set; } = string.Empty;
 
 
         /// <summary>
         /// The API key associated with this account, if present
         /// </summary>
-        public string ApiKey { get; set; }
+        public string ApiKey { get; set; } = string.Empty;
     }
 }

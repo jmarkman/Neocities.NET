@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Neocities.NET
+namespace NeocitiesNET.Options
 {
     public class ApiOptions
     {

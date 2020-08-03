@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.30320.27
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NeocitiesApi", "NeocitiesApi\NeocitiesApi.csproj", "{CDC1C7A2-4704-4B68-BC3B-C2FC98224B07}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Neocities.NET", "Neocities.NET\Neocities.NET.csproj", "{680B8667-FD64-4F25-8409-E247DF9CA0D0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NeocitiesNET", "Neocities.NET\NeocitiesNET.csproj", "{680B8667-FD64-4F25-8409-E247DF9CA0D0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

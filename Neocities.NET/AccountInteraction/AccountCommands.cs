@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Neocities.NET
+namespace NeocitiesNET.AccountInteraction
 {
     public class AccountCommands
     {
@@ -53,6 +53,11 @@ namespace Neocities.NET
             {
                 return false;
             }
+        }
+
+        public void DeleteAccount(string accountName)
+        {
+            _accountManager.DeleteAccount(accountName);
         }
 
         private Account ScaffoldAccount(AccountSecurityType securityType, List<string> account)
