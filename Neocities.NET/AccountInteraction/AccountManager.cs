@@ -11,6 +11,11 @@ namespace NeocitiesNET.AccountInteraction
         APIKey
     }
 
+    /// <summary>
+    /// Manages the Neocities website accounts that the user owns, allowing for
+    /// the user to switch between updating/querying the Neocities websites
+    /// owned by the user
+    /// </summary>
     public class AccountManager
     {
         private readonly string _accountFile = "accounts.json";
@@ -53,9 +58,9 @@ namespace NeocitiesNET.AccountInteraction
 
         /// <summary>
         /// Gets the specified account and sets it as the positionally first account
-        /// in the account file for usage during
+        /// in the account file when setting the primary account
         /// </summary>
-        /// <param name="username"></param>
+        /// <param name="username">The username of the account that should be positionally first</param>
         public void SetFirstAccount(string username)
         {
             var accounts = GetAllAccountsFromJson();
@@ -67,6 +72,12 @@ namespace NeocitiesNET.AccountInteraction
             File.WriteAllText(_accountFile, accountsJsonString);
         }
 
+        /// <summary>
+        /// Updates the specified account in the account list with the details provided in the
+        /// <see cref="Account"/> object
+        /// </summary>
+        /// <param name="securityType">The value to update: password or api key</param>
+        /// <param name="updatedAccount">The account containing the username to update and the updated value (password/api key)</param>
         public void UpdateAccount(AccountSecurityType securityType, Account updatedAccount)
         {
             var accounts = GetAllAccountsFromJson();
@@ -86,6 +97,10 @@ namespace NeocitiesNET.AccountInteraction
             File.WriteAllText(_accountFile, accountsJsonString);
         }
 
+        /// <summary>
+        /// Removes an account from the account file
+        /// </summary>
+        /// <param name="username">The username of the account to remove</param>
         public void DeleteAccount(string username)
         {
             var accounts = GetAllAccountsFromJson();
@@ -97,11 +112,21 @@ namespace NeocitiesNET.AccountInteraction
             File.WriteAllText(_accountFile, accountsJsonString);
         }
 
+        /// <summary>
+        /// Determine if the specified <see cref="Account"/> object exists in the
+        /// account file
+        /// </summary>
+        /// <param name="acct">The account to check for</param>
+        /// <returns><see cref="true"/> if the account exists in the file, <see cref="false"/> otherwise</returns>
         public bool DoesAccountExist(Account acct)
         {
             return GetAllAccountsFromJson().Exists(a => a.Username == acct.Username);
         }
 
+        /// <summary>
+        /// Reads the account file into a list
+        /// </summary>
+        /// <returns>A list of <see cref="Account"/> objects</returns>
         private List<Account> GetAllAccountsFromJson()
         {
             string json = File.ReadAllText(_accountFile);

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Newtonsoft.Json;
 
 namespace NeocitiesApi.Models
@@ -16,9 +17,9 @@ namespace NeocitiesApi.Models
         [JsonProperty("is_directory")]
         public bool IsDirectory { get; set; }
         [JsonProperty("size")]
-        public int Size { get; set; }
+        public double Size { get; set; }
         [JsonProperty("updated_at")]
-        public string UpdatedAt { get; set; }
+        public DateTime UpdatedAt { get; set; }
         [JsonProperty("sha1_hash")]
         public string SHA1Hash { get; set; }
     }

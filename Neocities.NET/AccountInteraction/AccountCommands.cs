@@ -5,6 +5,10 @@ using System.Text;
 
 namespace NeocitiesNET.AccountInteraction
 {
+    /// <summary>
+    /// Interacts with the JSON file that contains all of the
+    /// accounts that the user attaches to this program
+    /// </summary>
     public class AccountCommands
     {
         private readonly AccountManager _accountManager;
@@ -55,11 +59,40 @@ namespace NeocitiesNET.AccountInteraction
             }
         }
 
+        /// <summary>
+        /// Delete an account from the list of accounts
+        /// </summary>
+        /// <param name="accountName">The name of the account to delete</param>
         public void DeleteAccount(string accountName)
         {
             _accountManager.DeleteAccount(accountName);
         }
 
+        /// <summary>
+        /// Get the account that will be used for API operations
+        /// </summary>
+        /// <returns>The <see cref="Account"/> object with either an API key or a password</returns>
+        public Account GetActiveAccount()
+        {
+            return _accountManager.GetFirstAccount();
+        }
+
+        /// <summary>
+        /// Sets the account to use for API operations
+        /// </summary>
+        /// <returns><see cref="true"/> if the account was set successfully, <see cref="false"/> otherwise</returns>
+        public bool SetActiveAccount()
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Create a <see cref="Account"/> object from the command line information. Used for
+        /// adding or updating accounts.
+        /// </summary>
+        /// <param name="securityType">The type of API security this account will use to access the API</param>
+        /// <param name="account">The list from the command line input</param>
+        /// <returns>A <see cref="Account"/> object populated with the relevant information</returns>
         private Account ScaffoldAccount(AccountSecurityType securityType, List<string> account)
         {
             Account parsedAccount;

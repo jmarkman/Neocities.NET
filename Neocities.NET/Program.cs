@@ -1,5 +1,6 @@
 ﻿using CommandLine;
 using NeocitiesNET.AccountInteraction;
+using NeocitiesNET.ApiInteraction;
 using NeocitiesNET.Options;
 using System.Linq;
 
@@ -20,10 +21,13 @@ namespace NeocitiesNET
         private static int RunApiCommand(ApiOptions apiOption)
         {
             AccountCommands acctCommands = new AccountCommands();
+            var account = acctCommands.GetActiveAccount();
+            ApiCommands apiCommands = new ApiCommands(account);
+            
 
             if (apiOption.ListAllFiles)
             {
-                // List all files on website
+                apiCommands.ListAllFiles();
                 return 0;
             }
             else if (!string.IsNullOrWhiteSpace(apiOption.ListFilesFromDirectory))

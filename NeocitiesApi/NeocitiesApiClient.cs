@@ -11,16 +11,16 @@ using System.Threading.Tasks;
 
 namespace NeocitiesApi
 {
-    public class NeocitiesApi
+    public class NeocitiesApiClient
     {
         private readonly HttpClient _httpClient;
 
-        public NeocitiesApi(string apiKey)
+        public NeocitiesApiClient(string apiKey)
         {
             _httpClient = CreateHttpClient(apiKey);
         }
 
-        public NeocitiesApi(string username, string password)
+        public NeocitiesApiClient(string username, string password)
         {
             _httpClient = CreateHttpClient(username, password);
         }
