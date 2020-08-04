@@ -16,4 +16,10 @@
     <ProjectReference Include="..\NeocitiesApi\NeocitiesApi.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="accounts.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

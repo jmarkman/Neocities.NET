@@ -1,8 +1,9 @@
 ﻿using CommandLine;
 using System.Collections.Generic;
 
-namespace NeocitiesNET.Options
+namespace NeocitiesNET
 {
+    [Verb("account", HelpText = "Manage your various Neocities website credentials")]
     public class AccountOptions
     {
         [Option("addkey", Separator = ':', HelpText = "Add your website name and associated API key in the format [AccountName]:[API Key]")]

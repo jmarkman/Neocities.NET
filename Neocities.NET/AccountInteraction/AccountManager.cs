@@ -28,9 +28,13 @@ namespace NeocitiesNET.AccountInteraction
         /// <param name="account">Contains a username and either a password or an API key</param>
         public void AddAccount(Account account)
         {
-            string json = JsonConvert.SerializeObject(account);
+            var accounts = GetAllAccountsFromJson();
 
-            File.AppendAllText(_accountFile, json);
+            accounts.Add(account);
+
+            string json = JsonConvert.SerializeObject(accounts, Formatting.Indented);
+
+            File.WriteAllText(_accountFile, json);
         }
 
         /// <summary>

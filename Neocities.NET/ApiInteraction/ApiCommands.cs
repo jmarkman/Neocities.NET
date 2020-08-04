@@ -1,4 +1,5 @@
 ﻿using NeocitiesApi;
+using NeocitiesApi.Models;
 using NeocitiesNET.AccountInteraction;
 using System;
 using System.Collections.Generic;
@@ -25,12 +26,25 @@ namespace NeocitiesNET.ApiInteraction
         }
 
         /// <summary>
-        /// List all of the files present on the current website
+        /// Lists all the files on the website associated with the
+        /// current account. If a remote directory on the website is
+        /// provided, this method will list all the files in that
+        /// directory
         /// </summary>
-        public async void ListAllFiles()
+        /// <param name="remoteDirectory">The rmemote directory to list</param>
+        public async void ListAllFiles(string remoteDirectory = "")
         {
             StringBuilder listBuilder = new StringBuilder();
-            var allFiles = await _apiClient.GetWebsiteFileListAsync();
+            NeocitiesFileList allFiles;
+
+            if (!string.IsNullOrWhiteSpace(remoteDirectory))
+            {
+                allFiles = await _apiClient.GetWebsiteFileListAsync();
+            }
+            else
+            {
+                allFiles = await _apiClient.GetWebsiteFileListAsync(remoteDirectory);
+            }
 
             if (allFiles.Result == "success")
             {
@@ -49,12 +63,38 @@ namespace NeocitiesNET.ApiInteraction
         }
 
         /// <summary>
-        /// List files in the provided directory on the current website
+        /// Prints metadata about a Neocities website. By default this method
+        /// will retrieve metadata about the website associated with the current
+        /// account. If a website name is provided as an argument, this method
+        /// will retrieve the metadata about that website
         /// </summary>
-        /// <param name="directory"></param>
-        public async void ListFilesIn(string directory)
+        /// <param name="websiteName">If provided, will retrieve the metadata of this site</param>
+        public async void GetSiteData(string websiteName = "")
         {
-            throw new NotImplementedException();
+            StringBuilder metadataBuilder = new StringBuilder();
+            NeocitiesWebsiteInfo websiteData;
+
+            if (!string.IsNullOrWhiteSpace(websiteName))
+            {
+                websiteData = await _apiClient.GetWebsiteMetaDataAsync();
+            }
+            else
+            {
+                websiteData = await _apiClient.GetWebsiteMetaDataAsync(websiteName);
+            }
+
+            if (websiteData.Result == "success")
+            {
+                metadataBuilder.AppendLine($"Website Name: {websiteData.Attributes.SiteName}");
+                metadataBuilder.AppendLine($"Number of website hits: {websiteData.Attributes.NumberOfHits}");
+                metadataBuilder.AppendLine($"Site Creation Date: {websiteData.Attributes.CreatedAt.ToString("f", CultureInfo.CreateSpecificCulture(CultureInfo.CurrentCulture.ToString()))}");
+                metadataBuilder.AppendLine($"Site Last Updated At: {websiteData.Attributes.LastUpdated.ToString("f", CultureInfo.CreateSpecificCulture(CultureInfo.CurrentCulture.ToString()))}");
+                metadataBuilder.AppendLine($"Domain: {websiteData.Attributes.Domain}");
+                metadataBuilder.Append("Website Tags: ");
+                metadataBuilder.AppendJoin(", ", websiteData.Attributes.Tags);
+
+                Console.WriteLine(metadataBuilder.ToString());
+            }
         }
     }
 }

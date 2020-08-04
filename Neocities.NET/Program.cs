@@ -2,6 +2,7 @@
 using NeocitiesNET.AccountInteraction;
 using NeocitiesNET.ApiInteraction;
 using NeocitiesNET.Options;
+using System;
 using System.Linq;
 
 namespace NeocitiesNET
@@ -10,21 +11,41 @@ namespace NeocitiesNET
     {
         static int Main(string[] args)
         {
-            return Parser.Default.ParseArguments<AccountOptions, ApiOptions>(args)
+            return Parser.Default.ParseArguments<AccountOptions, ApiGet, ApiModify>(args)
                 .MapResult(
                     (AccountOptions acctOpts) => RunAccountCommand(acctOpts),
-                    (ApiOptions apiOpts) => RunApiCommand(apiOpts),
+                    (ApiGet getOpts) => ApiGetCommands(getOpts),
+                    (ApiModify modifyOpts) => ApiModifyCommands(modifyOpts),
                     _ => 1
                 );
         }
 
-        private static int RunApiCommand(ApiOptions apiOption)
+        private static int ApiModifyCommands(ApiModify modifyOpts)
+        {
+            AccountCommands acctCommands = new AccountCommands();
+            var account = acctCommands.GetActiveAccount();
+            ApiCommands apiCommands = new ApiCommands(account);
+
+            if (modifyOpts.DeleteFiles.Count() > 0)
+            {
+                // Delete files
+                return 0;
+            }
+            else if (!string.IsNullOrWhiteSpace(modifyOpts.UploadFile))
+            {
+                // Upload file
+                return 0;
+            }
+
+            return 1;
+        }
+
+        private static int ApiGetCommands(ApiGet apiOption)
         {
             AccountCommands acctCommands = new AccountCommands();
             var account = acctCommands.GetActiveAccount();
             ApiCommands apiCommands = new ApiCommands(account);
             
-
             if (apiOption.ListAllFiles)
             {
                 apiCommands.ListAllFiles();
@@ -48,16 +69,6 @@ namespace NeocitiesNET
             else if (apiOption.GetApiKey)
             {
                 // Print api key
-                return 0;
-            }
-            else if (!string.IsNullOrWhiteSpace(apiOption.UploadFile))
-            {
-                // Upload file
-                return 0;
-            }
-            else if (apiOption.DeleteFiles.Count() >= 1)
-            {
-                // Delete file or files from website
                 return 0;
             }
 

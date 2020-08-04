@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Newtonsoft.Json;
 
 namespace NeocitiesApi.Models
@@ -16,9 +17,9 @@ namespace NeocitiesApi.Models
         [JsonProperty("hits")]
         public int NumberOfHits { get; set; }
         [JsonProperty("created_at")]
-        public string CreatedAt { get; set; }
+        public DateTime CreatedAt { get; set; }
         [JsonProperty("last_updated")]
-        public string LastUpdated { get; set; }
+        public DateTime LastUpdated { get; set; }
         [JsonProperty("domain")]
         public string Domain { get; set; }
         [JsonProperty("tags")]
