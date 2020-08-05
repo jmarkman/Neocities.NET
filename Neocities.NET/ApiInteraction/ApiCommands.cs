@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace NeocitiesNET.ApiInteraction
 {
@@ -32,7 +33,7 @@ namespace NeocitiesNET.ApiInteraction
         /// directory
         /// </summary>
         /// <param name="remoteDirectory">The rmemote directory to list</param>
-        public async void ListAllFiles(string remoteDirectory = "")
+        public async Task ListAllFiles(string remoteDirectory = "")
         {
             StringBuilder listBuilder = new StringBuilder();
             NeocitiesFileList allFiles;
@@ -60,6 +61,8 @@ namespace NeocitiesNET.ApiInteraction
 
                 Console.WriteLine(listBuilder.ToString());
             }
+
+            return;
         }
 
         /// <summary>
@@ -69,7 +72,7 @@ namespace NeocitiesNET.ApiInteraction
         /// will retrieve the metadata about that website
         /// </summary>
         /// <param name="websiteName">If provided, will retrieve the metadata of this site</param>
-        public async void GetSiteData(string websiteName = "")
+        public async Task GetSiteData(string websiteName = "")
         {
             StringBuilder metadataBuilder = new StringBuilder();
             NeocitiesWebsiteInfo websiteData;
@@ -95,6 +98,8 @@ namespace NeocitiesNET.ApiInteraction
 
                 Console.WriteLine(metadataBuilder.ToString());
             }
+
+            return;
         }
     }
 }

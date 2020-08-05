@@ -4,23 +4,24 @@ using NeocitiesNET.ApiInteraction;
 using NeocitiesNET.Options;
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace NeocitiesNET
 {
     class Program
     {
-        static int Main(string[] args)
+        static async Task<int> Main(string[] args)
         {
-            return Parser.Default.ParseArguments<AccountOptions, ApiGet, ApiModify>(args)
+            return await Parser.Default.ParseArguments<AccountOptions, ApiGet, ApiModify>(args)
                 .MapResult(
                     (AccountOptions acctOpts) => RunAccountCommand(acctOpts),
                     (ApiGet getOpts) => ApiGetCommands(getOpts),
                     (ApiModify modifyOpts) => ApiModifyCommands(modifyOpts),
-                    _ => 1
+                    _ => Task.FromResult(1)
                 );
         }
 
-        private static int ApiModifyCommands(ApiModify modifyOpts)
+        private static async Task<int> ApiModifyCommands(ApiModify modifyOpts)
         {
             AccountCommands acctCommands = new AccountCommands();
             var account = acctCommands.GetActiveAccount();
@@ -40,7 +41,7 @@ namespace NeocitiesNET
             return 1;
         }
 
-        private static int ApiGetCommands(ApiGet apiOption)
+        private static async Task<int> ApiGetCommands(ApiGet apiOption)
         {
             AccountCommands acctCommands = new AccountCommands();
             var account = acctCommands.GetActiveAccount();
@@ -48,12 +49,12 @@ namespace NeocitiesNET
             
             if (apiOption.ListAllFiles)
             {
-                apiCommands.ListAllFiles();
+                await apiCommands.ListAllFiles();
                 return 0;
             }
             else if (!string.IsNullOrWhiteSpace(apiOption.ListFilesFromDirectory))
             {
-                // List files from specified directory
+                await apiCommands.ListAllFiles(apiOption.ListFilesFromDirectory);
                 return 0;
             }
             else if (apiOption.GetPersonalMetadata)
@@ -75,7 +76,7 @@ namespace NeocitiesNET
             return 1;
         }
 
-        private static int RunAccountCommand(AccountOptions acctOption)
+        private static async Task<int> RunAccountCommand(AccountOptions acctOption)
         {
             AccountCommands acctCommands = new AccountCommands();
 
@@ -130,7 +131,7 @@ namespace NeocitiesNET
             }
             else if (!string.IsNullOrWhiteSpace(acctOption.UseAccount))
             {
-                // Switch to certain account for api interactions
+                acctCommands.SetActiveAccount(acctOption.UseAccount);
                 return 0;
             }
 

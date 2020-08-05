@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -70,6 +71,12 @@ namespace NeocitiesNET.AccountInteraction
             var accounts = GetAllAccountsFromJson();
             var index = accounts.FindIndexOfAccount(username);
 
+            if (index == 0)
+            {
+                Console.WriteLine($"Account '{username}' is already first in the list!");
+                return;
+            }
+
             accounts.MoveAccountAtIndexTo(index, moveToIndex: 0);
 
             var accountsJsonString = JsonConvert.SerializeObject(accounts, Formatting.Indented);
@@ -118,13 +125,13 @@ namespace NeocitiesNET.AccountInteraction
 
         /// <summary>
         /// Determine if the specified <see cref="Account"/> object exists in the
-        /// account file
+        /// account file 
         /// </summary>
-        /// <param name="acct">The account to check for</param>
+        /// <param name="username">The name of the account to check</param>
         /// <returns><see cref="true"/> if the account exists in the file, <see cref="false"/> otherwise</returns>
-        public bool DoesAccountExist(Account acct)
+        public bool DoesAccountExist(string username)
         {
-            return GetAllAccountsFromJson().Exists(a => a.Username == acct.Username);
+            return GetAllAccountsFromJson().Exists(a => a.Username == username);
         }
 
         /// <summary>

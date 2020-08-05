@@ -5,20 +5,24 @@ VisualStudioVersion = 16.0.30320.27
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NeocitiesApi", "NeocitiesApi\NeocitiesApi.csproj", "{CDC1C7A2-4704-4B68-BC3B-C2FC98224B07}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NeocitiesNET", "Neocities.NET\NeocitiesNET.csproj", "{680B8667-FD64-4F25-8409-E247DF9CA0D0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NeocitiesNET", "Neocities.NET\NeocitiesNET.csproj", "{680B8667-FD64-4F25-8409-E247DF9CA0D0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
+		DebugWithAccount|Any CPU = DebugWithAccount|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{CDC1C7A2-4704-4B68-BC3B-C2FC98224B07}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{CDC1C7A2-4704-4B68-BC3B-C2FC98224B07}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CDC1C7A2-4704-4B68-BC3B-C2FC98224B07}.DebugWithAccount|Any CPU.ActiveCfg = Debug|Any CPU
+		{CDC1C7A2-4704-4B68-BC3B-C2FC98224B07}.DebugWithAccount|Any CPU.Build.0 = Debug|Any CPU
 		{CDC1C7A2-4704-4B68-BC3B-C2FC98224B07}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CDC1C7A2-4704-4B68-BC3B-C2FC98224B07}.Release|Any CPU.Build.0 = Release|Any CPU
 		{680B8667-FD64-4F25-8409-E247DF9CA0D0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{680B8667-FD64-4F25-8409-E247DF9CA0D0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{680B8667-FD64-4F25-8409-E247DF9CA0D0}.DebugWithAccount|Any CPU.ActiveCfg = Debug|Any CPU
 		{680B8667-FD64-4F25-8409-E247DF9CA0D0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{680B8667-FD64-4F25-8409-E247DF9CA0D0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection

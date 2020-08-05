@@ -27,13 +27,15 @@ namespace NeocitiesNET.AccountInteraction
         {
             Account parsedAccount = ScaffoldAccount(securityType, account);
 
-            if (_accountManager.DoesAccountExist(parsedAccount))
+            if (_accountManager.DoesAccountExist(parsedAccount.Username))
             {
+                Console.WriteLine($"The account '{parsedAccount.Username}' already exists. Did you mean to update it?");
                 return false;
             }
             else
             {
                 _accountManager.AddAccount(parsedAccount);
+                Console.WriteLine($"Account '{parsedAccount.Username}' added to account list!");
                 return true;
             } 
         }
@@ -48,13 +50,15 @@ namespace NeocitiesNET.AccountInteraction
         {
             Account parsedAccount = ScaffoldAccount(securityType, account);
 
-            if (_accountManager.DoesAccountExist(parsedAccount))
+            if (_accountManager.DoesAccountExist(parsedAccount.Username))
             {
                 _accountManager.UpdateAccount(securityType, parsedAccount);
+                Console.WriteLine($"Updated the {securityType} for '{parsedAccount.Username}'");
                 return true;
             }
             else
             {
+                Console.WriteLine($"Failed to update '{parsedAccount.Username}'!");
                 return false;
             }
         }
@@ -65,7 +69,14 @@ namespace NeocitiesNET.AccountInteraction
         /// <param name="accountName">The name of the account to delete</param>
         public void DeleteAccount(string accountName)
         {
-            _accountManager.DeleteAccount(accountName);
+            if (_accountManager.DoesAccountExist(accountName))
+            {
+                _accountManager.DeleteAccount(accountName);
+            }
+            else
+            {
+                Console.WriteLine($"The account '{accountName}' isn't in the list of accounts.");
+            }
         }
 
         /// <summary>
@@ -80,10 +91,9 @@ namespace NeocitiesNET.AccountInteraction
         /// <summary>
         /// Sets the account to use for API operations
         /// </summary>
-        /// <returns><see cref="true"/> if the account was set successfully, <see cref="false"/> otherwise</returns>
-        public bool SetActiveAccount()
+        public void SetActiveAccount(string accountName)
         {
-            throw new NotImplementedException();
+            _accountManager.SetFirstAccount(accountName);
         }
 
         /// <summary>
