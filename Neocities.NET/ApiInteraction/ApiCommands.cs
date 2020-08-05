@@ -4,6 +4,7 @@ using NeocitiesNET.AccountInteraction;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -116,6 +117,26 @@ namespace NeocitiesNET.ApiInteraction
             }
 
             return;
+        }
+
+        /// <summary>
+        /// Upload a file to the website associated with the current account
+        /// </summary>
+        /// <param name="filepath">The path on disk to the file to upload</param>
+        /// <returns><see cref="true"/> if the upload succeeded, <see cref="false"/> otherwise</returns>
+        public async Task<bool> UploadFile(string filepath)
+        {
+            return await _apiClient.UploadFileToWebsiteAsync(filepath);
+        }
+
+        /// <summary>
+        /// Delete a file or files on the website associated with the current account
+        /// </summary>
+        /// <param name="files">The file or collection of files to delete</param>
+        /// <returns><see cref="true"/> if the deletion succeeded, <see cref="false"/> otherwise</returns>
+        public async Task<bool> DeleteFile(IEnumerable<string> files)
+        {
+            return await _apiClient.DeleteFilesFromWebsiteAsync(files.ToArray());
         }
     }
 }

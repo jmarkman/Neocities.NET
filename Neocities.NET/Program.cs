@@ -28,13 +28,21 @@ namespace NeocitiesNET
 
             if (modifyOpts.DeleteFiles.Count() > 0)
             {
-                // Delete files
-                return 0;
+                if (await apiCommands.DeleteFile(modifyOpts.DeleteFiles))
+                {
+                    return 0;
+                }
+
+                return 1;
             }
             else if (!string.IsNullOrWhiteSpace(modifyOpts.UploadFile))
             {
-                // Upload file
-                return 0;
+                if (await apiCommands.UploadFile(modifyOpts.UploadFile))
+                {
+                    return 0;
+                }
+
+                return 1;
             }
 
             return 1;
