@@ -101,5 +101,21 @@ namespace NeocitiesNET.ApiInteraction
 
             return;
         }
+
+        /// <summary>
+        /// Gets the API key for the user's site if they're using a
+        /// username/password combo to access the API
+        /// </summary>
+        public async Task GetSiteKey()
+        {
+            var keyData = await _apiClient.GetWebsiteApiKeyAsync();
+
+            if (keyData.Result == "success")
+            {
+                Console.WriteLine($"API key: {keyData.ApiKey}");
+            }
+
+            return;
+        }
     }
 }

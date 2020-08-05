@@ -2,7 +2,6 @@
 using NeocitiesNET.AccountInteraction;
 using NeocitiesNET.ApiInteraction;
 using NeocitiesNET.Options;
-using System;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -59,17 +58,17 @@ namespace NeocitiesNET
             }
             else if (apiOption.GetPersonalMetadata)
             {
-                // Print personal site metadata
+                await apiCommands.GetSiteData();
                 return 0;
             }
             else if (!string.IsNullOrWhiteSpace(apiOption.GetSiteMetadata))
             {
-                // Print metadata for specific site
+                await apiCommands.GetSiteData(apiOption.GetSiteMetadata);
                 return 0;
             }
             else if (apiOption.GetApiKey)
             {
-                // Print api key
+                await apiCommands.GetSiteKey();
                 return 0;
             }
 
