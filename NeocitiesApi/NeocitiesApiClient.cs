@@ -5,11 +5,9 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace NeocitiesApi
@@ -93,6 +91,12 @@ namespace NeocitiesApi
         {
             FileInfo fileToUpload = new FileInfo(filePathOnDisk);
 
+            if (!fileToUpload.Exists)
+            {
+                Console.WriteLine($"Failed to upload! The file at '{filePathOnDisk}' does not exist.");
+                return false;
+            }
+
             var fileContent = new StreamContent(fileToUpload.OpenRead())
             {
                 Headers =
@@ -110,7 +114,6 @@ namespace NeocitiesApi
             return uploadResult.IsSuccessStatusCode;
         }
 
-
         /// <summary>
         /// Deletes a file or number of files from the website
         /// </summary>
@@ -121,6 +124,13 @@ namespace NeocitiesApi
             var fileContent = new FormUrlEncodedContent(files.Select(file => new KeyValuePair<string, string>("filenames[]", file)));
 
             var deleteResult = await _httpClient.PostAsync($"delete", fileContent);
+
+            if (!deleteResult.IsSuccessStatusCode)
+            {
+                var error = JsonConvert.DeserializeObject<NeocitiesError>(await deleteResult.Content.ReadAsStringAsync());
+                Console.WriteLine(error.Message);
+                return deleteResult.IsSuccessStatusCode;
+            }
 
             return deleteResult.IsSuccessStatusCode;
         }
