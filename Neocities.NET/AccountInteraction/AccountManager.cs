@@ -27,15 +27,24 @@ namespace NeocitiesNET.AccountInteraction
         /// Add an account to the account file
         /// </summary>
         /// <param name="account">Contains a username and either a password or an API key</param>
-        public void AddAccount(Account account)
+        /// <returns><see cref="true"/> if the account was created successfully, <see cref="false"/> otherwise</returns>
+        public bool AddAccount(Account account)
         {
             var accounts = GetAllAccountsFromJson();
+
+            if (accounts.DoesAccountExist(account.Username))
+            {
+                Console.WriteLine($"Account '{account.Username}' does not exist in the list of accounts; can't update what isn't in the list!");
+                return false;
+            }
 
             accounts.Add(account);
 
             string json = JsonConvert.SerializeObject(accounts, Formatting.Indented);
 
             File.WriteAllText(_accountFile, json);
+
+            return true;
         }
 
         /// <summary>
@@ -66,7 +75,9 @@ namespace NeocitiesNET.AccountInteraction
         /// in the account file when setting the primary account
         /// </summary>
         /// <param name="username">The username of the account that should be positionally first</param>
-        public void SetFirstAccount(string username)
+        /// <returns><see cref="true"/> if setting the provided account to the top of the list was 
+        /// successful, <see cref="false"/> otherwise</returns>
+        public bool SetFirstAccount(string username)
         {
             var accounts = GetAllAccountsFromJson();
             var index = accounts.FindIndexOfAccount(username);
@@ -74,13 +85,15 @@ namespace NeocitiesNET.AccountInteraction
             if (index == 0)
             {
                 Console.WriteLine($"Account '{username}' is already first in the list!");
-                return;
+                return false;
             }
 
             accounts.MoveAccountAtIndexTo(index, moveToIndex: 0);
 
             var accountsJsonString = JsonConvert.SerializeObject(accounts, Formatting.Indented);
             File.WriteAllText(_accountFile, accountsJsonString);
+
+            return true;
         }
 
         /// <summary>
@@ -89,9 +102,17 @@ namespace NeocitiesNET.AccountInteraction
         /// </summary>
         /// <param name="securityType">The value to update: password or api key</param>
         /// <param name="updatedAccount">The account containing the username to update and the updated value (password/api key)</param>
-        public void UpdateAccount(AccountSecurityType securityType, Account updatedAccount)
+        /// <returns><see cref="true"/> if the update was successful, <see cref="false"/> otherwise</returns>
+        public bool UpdateAccount(AccountSecurityType securityType, Account updatedAccount)
         {
             var accounts = GetAllAccountsFromJson();
+
+            if (!accounts.DoesAccountExist(updatedAccount.Username))
+            {
+                Console.WriteLine($"Account '{updatedAccount.Username}' does not exist in the list of accounts; can't update what isn't in the list!");
+                return false;
+            }
+
             var index = accounts.FindIndexOfAccount(updatedAccount.Username);
 
             switch (securityType)
@@ -106,32 +127,32 @@ namespace NeocitiesNET.AccountInteraction
 
             var accountsJsonString = JsonConvert.SerializeObject(accounts, Formatting.Indented);
             File.WriteAllText(_accountFile, accountsJsonString);
+
+            return true;
         }
 
         /// <summary>
         /// Removes an account from the account file
         /// </summary>
         /// <param name="username">The username of the account to remove</param>
-        public void DeleteAccount(string username)
+        public bool DeleteAccount(string username)
         {
             var accounts = GetAllAccountsFromJson();
+
+            if (!accounts.DoesAccountExist(username))
+            {
+                Console.WriteLine($"Account '{username}' does not exist in the list of accounts; can't delete what isn't in the list!");
+                return false;
+            }
+
             var index = accounts.FindIndexOfAccount(username);
 
             accounts.RemoveAt(index);
 
             var accountsJsonString = JsonConvert.SerializeObject(accounts, Formatting.Indented);
             File.WriteAllText(_accountFile, accountsJsonString);
-        }
 
-        /// <summary>
-        /// Determine if the specified <see cref="Account"/> object exists in the
-        /// account file 
-        /// </summary>
-        /// <param name="username">The name of the account to check</param>
-        /// <returns><see cref="true"/> if the account exists in the file, <see cref="false"/> otherwise</returns>
-        public bool DoesAccountExist(string username)
-        {
-            return GetAllAccountsFromJson().Exists(a => a.Username == username);
+            return true;
         }
 
         /// <summary>

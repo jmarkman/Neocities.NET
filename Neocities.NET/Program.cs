@@ -89,9 +89,7 @@ namespace NeocitiesNET
 
             if (acctOption.AddApiKey.Count() > 1)
             {
-                var success = acctCommands.AddAccount(AccountSecurityType.APIKey, acctOption.AddApiKey.ToList());
-
-                if (success)
+                if (acctCommands.AddAccount(AccountSecurityType.APIKey, acctOption.AddApiKey.ToList()))
                 {
                     return 0;
                 }
@@ -100,9 +98,7 @@ namespace NeocitiesNET
             }
             else if (acctOption.AddPassword.Count() > 1)
             {
-                var success = acctCommands.AddAccount(AccountSecurityType.Password, acctOption.AddApiKey.ToList());
-
-                if (success)
+                if (acctCommands.AddAccount(AccountSecurityType.Password, acctOption.AddApiKey.ToList()))
                 {
                     return 0;
                 }
@@ -111,9 +107,7 @@ namespace NeocitiesNET
             }
             else if (acctOption.UpdateApiKey.Count() > 1)
             {
-                var success = acctCommands.UpdateAccount(AccountSecurityType.APIKey, acctOption.AddApiKey.ToList());
-
-                if (success)
+                if (acctCommands.UpdateAccount(AccountSecurityType.APIKey, acctOption.AddApiKey.ToList()))
                 {
                     return 0;
                 }
@@ -122,9 +116,7 @@ namespace NeocitiesNET
             }
             else if (acctOption.UpdatePassword.Count() > 1)
             {
-                var success = acctCommands.UpdateAccount(AccountSecurityType.Password, acctOption.AddApiKey.ToList());
-
-                if (success)
+                if (acctCommands.UpdateAccount(AccountSecurityType.Password, acctOption.AddApiKey.ToList()))
                 {
                     return 0;
                 }
@@ -133,13 +125,21 @@ namespace NeocitiesNET
             }
             else if (!string.IsNullOrWhiteSpace(acctOption.DeleteAccountInfo))
             {
-                acctCommands.DeleteAccount(acctOption.DeleteAccountInfo);
-                return 0;
+                if (acctCommands.DeleteAccount(acctOption.DeleteAccountInfo))
+                {
+                    return 0;
+                }
+
+                return 1;
             }
             else if (!string.IsNullOrWhiteSpace(acctOption.UseAccount))
             {
-                acctCommands.SetActiveAccount(acctOption.UseAccount);
-                return 0;
+                if (acctCommands.SetActiveAccount(acctOption.UseAccount))
+                {
+                    return 0;
+                }
+
+                return 1;
             }
 
             return 1;

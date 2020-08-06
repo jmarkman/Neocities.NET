@@ -1,7 +1,10 @@
-﻿using NeocitiesApi.Models;
+﻿using MimeTypes;
+using NeocitiesApi.Models;
 using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Net;
 using System.Net.Http;
@@ -95,7 +98,7 @@ namespace NeocitiesApi
                 Headers =
                 {
                     ContentLength = fileToUpload.Length,
-                    ContentType = new MediaTypeHeaderValue(fileToUpload.Extension)
+                    ContentType = new MediaTypeHeaderValue(MimeTypeMap.GetMimeType(fileToUpload.Extension))
                 }
             };
 
@@ -115,9 +118,9 @@ namespace NeocitiesApi
         /// <returns><see cref="true"/> if the deletion was successful, <see cref="false"/> otherwise</returns>
         public async Task<bool> DeleteFilesFromWebsiteAsync(params string[] files)
         {
-            var deleteFiles = string.Join(",", files);
-            var data = new StringContent(deleteFiles, Encoding.UTF8, "application/json");
-            var deleteResult = await _httpClient.PostAsync($"delete?filenames[]=", data);
+            var fileContent = new FormUrlEncodedContent(files.Select(file => new KeyValuePair<string, string>("filenames[]", file)));
+
+            var deleteResult = await _httpClient.PostAsync($"delete", fileContent);
 
             return deleteResult.IsSuccessStatusCode;
         }

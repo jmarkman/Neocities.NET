@@ -40,6 +40,18 @@ namespace NeocitiesNET
         }
 
         /// <summary>
+        /// Determines if the account exists in the list of accounts based on the provided
+        /// account username.
+        /// </summary>
+        /// <param name="accounts">The list of <see cref="Account"/> objects</param>
+        /// <param name="accountUsername">The username of the account to search for</param>
+        /// <returns><see cref="true"/> if the account exists, <see cref="false"/> otherwise</returns>
+        public static bool DoesAccountExist(this List<Account> accounts, string accountUsername)
+        {
+            return accounts.Exists(a => a.Username == accountUsername);
+        }
+
+        /// <summary>
         /// Converts a byte value to a kilobyte using the base 10 conversion rather
         /// than the base 2 conversion
         /// </summary>
