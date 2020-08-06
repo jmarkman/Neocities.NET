@@ -55,7 +55,7 @@ namespace NeocitiesNET.ApiInteraction
                     listBuilder.AppendLine($"File: {file.Path}");
                     listBuilder.AppendLine($"Directory?: {file.IsDirectory}");
                     listBuilder.AppendLine($"Size: {file.Size.ConvertFromBytesToBase10Kilobytes()} kB");
-                    listBuilder.AppendLine($"Last updated at: {file.UpdatedAt.ToString("f", CultureInfo.CreateSpecificCulture(CultureInfo.CurrentCulture.ToString()))}");
+                    listBuilder.AppendLine($"Last updated: {file.UpdatedAt.ToString("f", CultureInfo.CreateSpecificCulture(CultureInfo.CurrentCulture.ToString()))}");
                     listBuilder.AppendLine($"SHA-1 Hash: {file.SHA1Hash}");
                     listBuilder.AppendLine();
                 }
@@ -92,7 +92,7 @@ namespace NeocitiesNET.ApiInteraction
                 metadataBuilder.AppendLine($"Website Name: {websiteData.Attributes.SiteName}");
                 metadataBuilder.AppendLine($"Number of website hits: {websiteData.Attributes.NumberOfHits}");
                 metadataBuilder.AppendLine($"Site Creation Date: {websiteData.Attributes.CreatedAt.ToString("f", CultureInfo.CreateSpecificCulture(CultureInfo.CurrentCulture.ToString()))}");
-                metadataBuilder.AppendLine($"Site Last Updated At: {websiteData.Attributes.LastUpdated.ToString("f", CultureInfo.CreateSpecificCulture(CultureInfo.CurrentCulture.ToString()))}");
+                metadataBuilder.AppendLine($"Site Last Updated: {websiteData.Attributes.LastUpdated.ToString("f", CultureInfo.CreateSpecificCulture(CultureInfo.CurrentCulture.ToString()))}");
                 metadataBuilder.AppendLine($"Domain: {websiteData.Attributes.Domain}");
                 metadataBuilder.Append("Website Tags: ");
                 metadataBuilder.AppendJoin(", ", websiteData.Attributes.Tags);
