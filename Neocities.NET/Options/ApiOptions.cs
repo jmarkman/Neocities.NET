@@ -11,7 +11,7 @@ namespace NeocitiesNET.Options
         [Option('f', "allfiles", HelpText = "Retrieves a list of all the files on the website")]
         public bool ListAllFiles { get; set; }
 
-        [Option('F', "listfilesin", HelpText = "Get all files from a specified directory")]
+        [Option('F', "filesin", HelpText = "Get all files from a specified directory")]
         public string ListFilesFromDirectory { get; set; }
 
         [Option('a', "mysitedata", HelpText = "Get your own website's metadata")]
@@ -25,7 +25,7 @@ namespace NeocitiesNET.Options
 
     }
 
-    [Verb("modify", HelpText = "Modify the files your Neocities website")]
+    [Verb("modify", HelpText = "Modify the files on your Neocities website")]
     public class ApiModify
     {
 

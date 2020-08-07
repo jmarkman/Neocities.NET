@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 
 namespace NeocitiesNET.AccountInteraction
 {
@@ -19,9 +20,12 @@ namespace NeocitiesNET.AccountInteraction
     /// </summary>
     public class AccountManager
     {
-        private readonly string _accountFile = "accounts.json";
+        private readonly string _accountFile;
 
-        public AccountManager() { }
+        public AccountManager() 
+        {
+            _accountFile = Path.Join(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "accounts.json");
+        }
 
         /// <summary>
         /// Add an account to the account file
