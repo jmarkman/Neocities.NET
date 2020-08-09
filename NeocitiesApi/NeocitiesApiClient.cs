@@ -219,7 +219,8 @@ namespace NeocitiesApi
         /// the disk to the Neocities API
         /// </summary>
         /// <param name="file">The file from disk</param>
-
+        /// <param name="directoryName">Used for uploading files from directories so the file is placed
+        /// in the correct folder in the Neocities root</param>
         /// <returns>The file as a <see cref="MultipartFormDataContent"/> object</returns>
         private MultipartFormDataContent CreateUploadObject(FileInfo file, string directoryName = "")
         {
