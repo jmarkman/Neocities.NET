@@ -89,29 +89,14 @@ namespace NeocitiesApi
         /// <returns><see cref="true"/> if the upload was successful, <see cref="false"/> otherwise</returns>
         public async Task<bool> UploadFileToWebsiteAsync(string filePathOnDisk)
         {
-            FileInfo fileToUpload = new FileInfo(filePathOnDisk);
-
-            if (!fileToUpload.Exists)
+            if (filePathOnDisk.IsDirectory())
             {
-                Console.WriteLine($"Failed to upload! The file at '{filePathOnDisk}' does not exist.");
-                return false;
+                return await UploadFilesInDirectory(filePathOnDisk);
             }
-
-            var fileContent = new StreamContent(fileToUpload.OpenRead())
+            else
             {
-                Headers =
-                {
-                    ContentLength = fileToUpload.Length,
-                    ContentType = new MediaTypeHeaderValue(MimeTypeMap.GetMimeType(fileToUpload.Extension))
-                }
-            };
-
-            var uploadContent = new MultipartFormDataContent();
-            uploadContent.Add(fileContent, fileToUpload.Name, fileToUpload.FullName);
-
-            var uploadResult = await _httpClient.PostAsync("upload", uploadContent);
-
-            return uploadResult.IsSuccessStatusCode;
+                return await UploadFile(filePathOnDisk);
+            }
         }
 
         /// <summary>
@@ -185,6 +170,82 @@ namespace NeocitiesApi
             client.BaseAddress = new Uri($"https://{username}:{password}@neocities.org/api/");
 
             return client;
+        }
+
+        private async Task<bool> UploadFilesInDirectory(string dir)
+        {
+            DirectoryInfo directory = new DirectoryInfo(dir);
+
+            if (!directory.Exists)
+            {
+                Console.WriteLine($"Upload failed! The directory at '{dir}' does not exist.");
+                return false;
+            }
+
+            foreach (var file in directory.GetFiles("*", SearchOption.AllDirectories))
+            {
+                await UploadFile(file.FullName, dir);
+            }
+
+
+            return true;
+        }
+
+        /// <summary>
+        /// Encapsulates the steps for uploading a single file to the Neocities API
+        /// </summary>
+        /// <param name="filePath">The path to the file on disk</param>
+        /// <param name="originalDirectory">Used for uploading files from directories</param>
+        /// <returns><see cref="true"/> if the upload was successful, <see cref="false"/> otherwise</returns>
+        private async Task<bool> UploadFile(string filePath, string originalDirectory = "")
+        {
+            FileInfo fileToUpload = new FileInfo(filePath);
+
+            if (!fileToUpload.Exists)
+            {
+                Console.WriteLine($"Upload failed! The file at '{filePath}' does not exist.");
+                return false;
+            }
+
+            var uploadContent = CreateUploadObject(fileToUpload, originalDirectory);
+
+            var uploadResult = await _httpClient.PostAsync("upload", uploadContent);
+
+            return uploadResult.IsSuccessStatusCode;
+        }
+
+        /// <summary>
+        /// Creates a <see cref="MultipartFormDataContent"/> object used for uploading a file from
+        /// the disk to the Neocities API
+        /// </summary>
+        /// <param name="file">The file from disk</param>
+
+        /// <returns>The file as a <see cref="MultipartFormDataContent"/> object</returns>
+        private MultipartFormDataContent CreateUploadObject(FileInfo file, string directoryName = "")
+        {
+            var fileContent = new StreamContent(file.OpenRead())
+            {
+                Headers =
+                {
+                    ContentLength = file.Length,
+                    ContentType = new MediaTypeHeaderValue(MimeTypeMap.GetMimeType(file.Extension))
+                }
+            };
+
+            var uploadContent = new MultipartFormDataContent();
+
+            if (!string.IsNullOrWhiteSpace(directoryName))
+            {
+                var remotePath = Path.GetRelativePath(directoryName, file.FullName).ConvertWindowsDirectorySeparatorToUnixSeparator();
+                uploadContent.Add(fileContent, remotePath, file.FullName);
+            }
+            else
+            {
+                uploadContent.Add(fileContent, file.Name, file.FullName);
+            }
+            
+
+            return uploadContent;
         }
     }
 }

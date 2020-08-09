@@ -41,11 +41,11 @@ namespace NeocitiesNET.ApiInteraction
 
             if (!string.IsNullOrWhiteSpace(remoteDirectory))
             {
-                allFiles = await _apiClient.GetWebsiteFileListAsync();
+                allFiles = await _apiClient.GetWebsiteFileListAsync(remoteDirectory);
             }
             else
             {
-                allFiles = await _apiClient.GetWebsiteFileListAsync(remoteDirectory);
+                allFiles = await _apiClient.GetWebsiteFileListAsync();
             }
 
             if (allFiles.Result == "success")

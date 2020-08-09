@@ -7,10 +7,10 @@ namespace NeocitiesApi.Models
     public class NeocitiesFileList : NeocitiesWebsiteBase
     {
         [JsonProperty("files")]
-        public List<File> Files { get; set; }
+        public List<NeocitiesFile> Files { get; set; }
     }
 
-    public class File
+    public class NeocitiesFile
     {
         [JsonProperty("path")]
         public string Path { get; set; }

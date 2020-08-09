@@ -55,7 +55,7 @@ namespace NeocitiesNET
         /// Converts a byte value to a kilobyte using the base 10 conversion rather
         /// than the base 2 conversion
         /// </summary>
-        /// <param name="bytes">e.x., <see cref="NeocitiesApi.Models.File.Size"/></param>
+        /// <param name="bytes">e.x., <see cref="NeocitiesApi.Models.NeocitiesFile.Size"/></param>
         /// <returns>The byte value in base 10 kilobytes</returns>
         public static double ConvertFromBytesToBase10Kilobytes(this double bytes)
         {
