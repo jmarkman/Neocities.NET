@@ -1,6 +1,7 @@
 ﻿using NeocitiesNET.AccountInteraction;
 using System;
 using System.Collections.Generic;
+using System.IO;
 
 namespace NeocitiesNET
 {
@@ -60,6 +61,23 @@ namespace NeocitiesNET
         public static double ConvertFromBytesToBase10Kilobytes(this double bytes)
         {
             return Math.Round(bytes / 1000f, 1);
+        }
+
+        /// <summary>
+        /// Given a valid path, determine if the path is a directory
+        /// </summary>
+        /// <param name="path">The path to check</param>
+        /// <returns><see cref="true"/> if the path is a directory, <see cref="false"/> otherwise</returns>
+        public static bool IsDirectory(this string path)
+        {
+            FileAttributes attr = File.GetAttributes(path);
+
+            if (attr.HasFlag(FileAttributes.Directory))
+            {
+                return true;
+            }
+
+            return false;
         }
     }
 }

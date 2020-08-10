@@ -124,9 +124,18 @@ namespace NeocitiesNET.ApiInteraction
         /// </summary>
         /// <param name="filepath">The path on disk to the file to upload</param>
         /// <returns><see cref="true"/> if the upload succeeded, <see cref="false"/> otherwise</returns>
-        public async Task<bool> UploadFile(string filepath)
+        public async Task<bool> Upload(string filepath)
         {
-            return await _apiClient.UploadFileToWebsiteAsync(filepath);
+            if (filepath.IsDirectory())
+            {
+                Console.WriteLine($"Uploading files and folders in '{filepath}'");
+            }
+            else
+            {
+                Console.WriteLine($"Uploading '{filepath}'");
+            }
+
+            return await _apiClient.UploadToWebsiteAsync(filepath);
         }
 
         /// <summary>
@@ -134,9 +143,11 @@ namespace NeocitiesNET.ApiInteraction
         /// </summary>
         /// <param name="files">The file or collection of files to delete</param>
         /// <returns><see cref="true"/> if the deletion succeeded, <see cref="false"/> otherwise</returns>
-        public async Task<bool> DeleteFile(IEnumerable<string> files)
+        public async Task<bool> Delete(IEnumerable<string> files)
         {
-            return await _apiClient.DeleteFilesFromWebsiteAsync(files.ToArray());
+            Console.WriteLine($"Deleting the following files: {string.Join(",", files)}");
+
+            return await _apiClient.DeleteFromWebsiteAsync(files.ToArray());
         }
     }
 }

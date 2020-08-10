@@ -87,7 +87,7 @@ namespace NeocitiesApi
         /// </summary>
         /// <param name="filePathOnDisk">The complete path to the file on disk</param>
         /// <returns><see cref="true"/> if the upload was successful, <see cref="false"/> otherwise</returns>
-        public async Task<bool> UploadFileToWebsiteAsync(string filePathOnDisk)
+        public async Task<bool> UploadToWebsiteAsync(string filePathOnDisk)
         {
             if (filePathOnDisk.IsDirectory())
             {
@@ -104,7 +104,7 @@ namespace NeocitiesApi
         /// </summary>
         /// <param name="files">A singular filename with extension or collection of filenames with extensions</param>
         /// <returns><see cref="true"/> if the deletion was successful, <see cref="false"/> otherwise</returns>
-        public async Task<bool> DeleteFilesFromWebsiteAsync(params string[] files)
+        public async Task<bool> DeleteFromWebsiteAsync(params string[] files)
         {
             var fileContent = new FormUrlEncodedContent(files.Select(file => new KeyValuePair<string, string>("filenames[]", file)));
 
@@ -178,15 +178,13 @@ namespace NeocitiesApi
 
             if (!directory.Exists)
             {
-                Console.WriteLine($"Upload failed! The directory at '{dir}' does not exist.");
-                return false;
+                throw new DirectoryNotFoundException($"Upload failed! The directory at '{dir}' does not exist.");
             }
 
             foreach (var file in directory.GetFiles("*", SearchOption.AllDirectories))
             {
                 await UploadFile(file.FullName, dir);
             }
-
 
             return true;
         }
@@ -203,8 +201,7 @@ namespace NeocitiesApi
 
             if (!fileToUpload.Exists)
             {
-                Console.WriteLine($"Upload failed! The file at '{filePath}' does not exist.");
-                return false;
+                throw new FileNotFoundException($"Upload failed! The file at '{filePath}' does not exist.");
             }
 
             var uploadContent = CreateUploadObject(fileToUpload, originalDirectory);

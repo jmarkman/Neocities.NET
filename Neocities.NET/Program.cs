@@ -28,7 +28,7 @@ namespace NeocitiesNET
 
             if (modifyOpts.DeleteFiles.Count() > 0)
             {
-                if (await apiCommands.DeleteFile(modifyOpts.DeleteFiles))
+                if (await apiCommands.Delete(modifyOpts.DeleteFiles))
                 {
                     return 0;
                 }
@@ -37,7 +37,7 @@ namespace NeocitiesNET
             }
             else if (!string.IsNullOrWhiteSpace(modifyOpts.UploadFile))
             {
-                if (await apiCommands.UploadFile(modifyOpts.UploadFile))
+                if (await apiCommands.Upload(modifyOpts.UploadFile))
                 {
                     return 0;
                 }
