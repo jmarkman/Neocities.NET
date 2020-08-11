@@ -21,7 +21,7 @@ namespace NeocitiesNET
         [Option("use", HelpText = "Specify the account to use")]
         public string UseAccount { get; set; }
 
-        [Option("delete", HelpText = "Delete the information (API key, password) associated with the specified account")]
+        [Option("delete", HelpText = "Delete the the specified account")]
         public string DeleteAccountInfo { get; set; }
     }
 }
