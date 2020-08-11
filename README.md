@@ -10,6 +10,25 @@ Some recommendations:
 - If you're a Windows user and need a shell scripting language, try out PowerShell!
 - While `username:password@neocities.org/api` authentication method is supported, I personally prefer the API key method of authentication since it has a far lower chance of being a credential associated with something other than Neocities, and an API key is easier to change if your key is somehow compromised
 
+## Installation
+
+### From Source
+
+Neocities.NET was made using .NET Core 3.1 and Visual Studio 2019, so ensure you have the most recent .NET Core SDK installed as well as VS 2019
+
+1. Clone this repository, i.e., `git clone https://github.com/jmarkman/Neocities.NET.git`
+2a. Build with the Release configuration in VS 2019
+*or*
+2b. Navigate to the project directory from the command line and type `dotnet build --configuration Release`
+3. Copy the contents of the `./Neocities.NET/bin/Release` folder to a reasonable location on your computer
+4. Add the NeocitiesNet executable to your PATH variable
+
+### From Releases
+
+1. Download the release
+2. Extract the contents to a reasonable location on your computer
+3. Add the NeocitiesNet executable to your PATH variable
+
 ## CLI Quick-Start
 
 ### Inline Help
