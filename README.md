@@ -17,8 +17,7 @@ Some recommendations:
 Neocities.NET was made using .NET Core 3.1 and Visual Studio 2019, so ensure you have the most recent .NET Core SDK installed as well as VS 2019
 
 1. Clone this repository, i.e., `git clone https://github.com/jmarkman/Neocities.NET.git`
-2a. Build with the Release configuration in VS 2019
-2b. Navigate to the project directory from the command line and type `dotnet build --configuration Release`
+2. Build with the Release configuration in VS 2019 *or* navigate to the project directory from the command line and type `dotnet build --configuration Release`
 3. Copy the contents of the `./Neocities.NET/bin/Release` folder to a reasonable location on your computer
 4. Add the NeocitiesNet executable to your PATH variable
 
