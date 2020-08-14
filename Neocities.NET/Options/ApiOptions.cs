@@ -23,7 +23,6 @@ namespace NeocitiesNET.Options
 
         [Option('j', "json", HelpText = "Specify this option alongside any of the other get options to return the raw JSON from the API rather than having it formatted")]
         public bool ReturnJson { get; set; }
-
     }
 
     [Verb("modify", HelpText = "Modify the files on your Neocities websites")]
