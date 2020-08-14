@@ -56,27 +56,27 @@ namespace NeocitiesNET
             
             if (apiOption.ListAllFiles)
             {
-                await apiCommands.ListAllFiles();
+                await apiCommands.ListAllFiles(apiOption.ReturnJson);
                 return 0;
             }
             else if (!string.IsNullOrWhiteSpace(apiOption.ListFilesFromDirectory))
             {
-                await apiCommands.ListAllFiles(apiOption.ListFilesFromDirectory);
+                await apiCommands.ListAllFiles(apiOption.ReturnJson, apiOption.ListFilesFromDirectory);
                 return 0;
             }
             else if (apiOption.GetPersonalMetadata)
             {
-                await apiCommands.GetSiteData();
+                await apiCommands.GetSiteData(apiOption.ReturnJson);
                 return 0;
             }
             else if (!string.IsNullOrWhiteSpace(apiOption.GetSiteMetadata))
             {
-                await apiCommands.GetSiteData(apiOption.GetSiteMetadata);
+                await apiCommands.GetSiteData(apiOption.ReturnJson, apiOption.GetSiteMetadata);
                 return 0;
             }
             else if (apiOption.GetApiKey)
             {
-                await apiCommands.GetSiteKey();
+                await apiCommands.GetSiteKey(apiOption.ReturnJson);
                 return 0;
             }
 

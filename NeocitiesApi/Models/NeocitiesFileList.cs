@@ -17,7 +17,7 @@ namespace NeocitiesApi.Models
         [JsonProperty("is_directory")]
         public bool IsDirectory { get; set; }
         [JsonProperty("size")]
-        public double Size { get; set; }
+        public int Size { get; set; }
         [JsonProperty("updated_at")]
         public DateTime UpdatedAt { get; set; }
         [JsonProperty("sha1_hash")]

@@ -1,6 +1,7 @@
 ﻿using NeocitiesApi;
 using NeocitiesApi.Models;
 using NeocitiesNET.AccountInteraction;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -24,7 +25,7 @@ namespace NeocitiesNET.ApiInteraction
             {
                 _apiClient = new NeocitiesApiClient(account.ApiKey);
             }
-            
+
         }
 
         /// <summary>
@@ -33,34 +34,31 @@ namespace NeocitiesNET.ApiInteraction
         /// provided, this method will list all the files in that
         /// directory
         /// </summary>
+        /// <param name="renderRawJson">If true, will print the raw JSON</param>
         /// <param name="remoteDirectory">The rmemote directory to list</param>
-        public async Task ListAllFiles(string remoteDirectory = "")
+        public async Task ListAllFiles(bool renderRawJson, string remoteDirectory = "")
         {
-            StringBuilder listBuilder = new StringBuilder();
-            NeocitiesFileList allFiles;
+            NeocitiesFileList filesResponse;
 
             if (!string.IsNullOrWhiteSpace(remoteDirectory))
             {
-                allFiles = await _apiClient.GetWebsiteFileListAsync(remoteDirectory);
+                filesResponse = await _apiClient.GetWebsiteFileListAsync(remoteDirectory);
             }
             else
             {
-                allFiles = await _apiClient.GetWebsiteFileListAsync();
+                filesResponse = await _apiClient.GetWebsiteFileListAsync();
             }
 
-            if (allFiles.Result == "success")
+            if (filesResponse.Result == "success")
             {
-                foreach (var file in allFiles.Files)
+                if (renderRawJson)
                 {
-                    listBuilder.AppendLine($"File: {file.Path}");
-                    listBuilder.AppendLine($"Directory?: {file.IsDirectory}");
-                    listBuilder.AppendLine($"Size: {file.Size.ConvertFromBytesToBase10Kilobytes()} kB");
-                    listBuilder.AppendLine($"Last updated: {file.UpdatedAt.ToString("f", CultureInfo.CreateSpecificCulture(CultureInfo.CurrentCulture.ToString()))}");
-                    listBuilder.AppendLine($"SHA-1 Hash: {file.SHA1Hash}");
-                    listBuilder.AppendLine();
+                    RenderRawJson(filesResponse);
                 }
-
-                Console.WriteLine(listBuilder.ToString());
+                else
+                {
+                    RenderFileList(filesResponse.Files);
+                }
             }
 
             return;
@@ -72,10 +70,10 @@ namespace NeocitiesNET.ApiInteraction
         /// account. If a website name is provided as an argument, this method
         /// will retrieve the metadata about that website
         /// </summary>
+        /// <param name="renderRawJson">If true, will print the raw JSON</param>
         /// <param name="websiteName">If provided, will retrieve the metadata of this site</param>
-        public async Task GetSiteData(string websiteName = "")
+        public async Task GetSiteData(bool renderRawJson, string websiteName = "")
         {
-            StringBuilder metadataBuilder = new StringBuilder();
             NeocitiesWebsiteInfo websiteData;
 
             if (!string.IsNullOrWhiteSpace(websiteName))
@@ -89,15 +87,14 @@ namespace NeocitiesNET.ApiInteraction
 
             if (websiteData.Result == "success")
             {
-                metadataBuilder.AppendLine($"Website Name: {websiteData.Attributes.SiteName}");
-                metadataBuilder.AppendLine($"Number of website hits: {websiteData.Attributes.NumberOfHits}");
-                metadataBuilder.AppendLine($"Site Creation Date: {websiteData.Attributes.CreatedAt.ToString("f", CultureInfo.CreateSpecificCulture(CultureInfo.CurrentCulture.ToString()))}");
-                metadataBuilder.AppendLine($"Site Last Updated: {websiteData.Attributes.LastUpdated.ToString("f", CultureInfo.CreateSpecificCulture(CultureInfo.CurrentCulture.ToString()))}");
-                metadataBuilder.AppendLine($"Domain: {websiteData.Attributes.Domain}");
-                metadataBuilder.Append("Website Tags: ");
-                metadataBuilder.AppendJoin(", ", websiteData.Attributes.Tags);
-
-                Console.WriteLine(metadataBuilder.ToString());
+                if (renderRawJson)
+                {
+                    RenderRawJson(websiteData);
+                }
+                else
+                {
+                    RenderSiteData(websiteData);
+                }
             }
 
             return;
@@ -107,13 +104,21 @@ namespace NeocitiesNET.ApiInteraction
         /// Gets the API key for the user's site if they're using a
         /// username/password combo to access the API
         /// </summary>
-        public async Task GetSiteKey()
+        /// <param name="renderRawJson">If true, will print the raw JSON</param>
+        public async Task GetSiteKey(bool renderRawJson)
         {
             var keyData = await _apiClient.GetWebsiteApiKeyAsync();
 
             if (keyData.Result == "success")
             {
-                Console.WriteLine($"API key: {keyData.ApiKey}");
+                if (renderRawJson)
+                {
+                    RenderRawJson(keyData);
+                }
+                else
+                {
+                    Console.WriteLine($"API key: {keyData.ApiKey}");
+                }
             }
 
             return;
@@ -148,6 +153,70 @@ namespace NeocitiesNET.ApiInteraction
             Console.WriteLine($"Deleting the following files: {string.Join(",", files)}");
 
             return await _apiClient.DeleteFromWebsiteAsync(files.ToArray());
+        }
+
+        /// <summary>
+        /// If the user wants to get the output as raw JSON, this method will serialize the 
+        /// Neocities model to a JSON string and print the serialized JSON to the console 
+        /// </summary>
+        /// <param name="jsonResponse">The response object that came back from the query</param>
+        private void RenderRawJson(NeocitiesWebsiteBase jsonResponse)
+        {
+            if (jsonResponse is NeocitiesFileList fileList)
+            {
+                foreach (var file in fileList.Files)
+                {
+                    var fileJson = JsonConvert.SerializeObject(file, Formatting.Indented);
+                    Console.WriteLine(fileJson);
+                }
+            }
+            else
+            {
+                var json = JsonConvert.SerializeObject(jsonResponse, Formatting.Indented);
+                Console.WriteLine(json);
+            }
+        }
+
+        /// <summary>
+        /// Prints each file returned from the all files query to the console window
+        /// in an organized manner
+        /// </summary>
+        /// <param name="allFiles">The list of files from the response object</param>
+        private void RenderFileList(List<NeocitiesFile> allFiles)
+        {
+            StringBuilder listBuilder = new StringBuilder();
+
+            foreach (var file in allFiles)
+            {
+                listBuilder.AppendLine($"File: {file.Path}");
+                listBuilder.AppendLine($"Directory?: {file.IsDirectory}");
+                listBuilder.AppendLine($"Size: {Convert.ToDouble(file.Size).ConvertFromBytesToBase10Kilobytes()} kB");
+                listBuilder.AppendLine($"Last updated: {file.UpdatedAt.ToString("f", CultureInfo.CreateSpecificCulture(CultureInfo.CurrentCulture.ToString()))}");
+                listBuilder.AppendLine($"SHA-1 Hash: {file.SHA1Hash}");
+                listBuilder.AppendLine();
+            }
+
+            Console.WriteLine(listBuilder.ToString());
+        }
+
+        /// <summary>
+        /// Prints the metadata associated with the website to the console window
+        /// in an organized manner
+        /// </summary>
+        /// <param name="websiteData">The response object containing the site metadata</param>
+        private void RenderSiteData(NeocitiesWebsiteInfo websiteData)
+        {
+            StringBuilder metadataBuilder = new StringBuilder();
+
+            metadataBuilder.AppendLine($"Website Name: {websiteData.Attributes.SiteName}");
+            metadataBuilder.AppendLine($"Number of website hits: {websiteData.Attributes.NumberOfHits}");
+            metadataBuilder.AppendLine($"Site Creation Date: {websiteData.Attributes.CreatedAt.ToString("f", CultureInfo.CreateSpecificCulture(CultureInfo.CurrentCulture.ToString()))}");
+            metadataBuilder.AppendLine($"Site Last Updated: {websiteData.Attributes.LastUpdated.ToString("f", CultureInfo.CreateSpecificCulture(CultureInfo.CurrentCulture.ToString()))}");
+            metadataBuilder.AppendLine($"Domain: {websiteData.Attributes.Domain}");
+            metadataBuilder.Append("Website Tags: ");
+            metadataBuilder.AppendJoin(", ", websiteData.Attributes.Tags);
+
+            Console.WriteLine(metadataBuilder.ToString());
         }
     }
 }
