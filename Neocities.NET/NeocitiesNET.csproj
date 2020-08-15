@@ -11,6 +11,7 @@
     <Company />
     <Product />
     <Description>A command-line interface for interacting with the Neocities API</Description>
+    <PackageProjectUrl>https://github.com/jmarkman/Neocities.NET</PackageProjectUrl>
   </PropertyGroup>
 
   <ItemGroup>
