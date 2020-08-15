@@ -48,3 +48,7 @@ Neocities.NET was made using .NET Core 3.1 and Visual Studio 2019, so ensure you
 ## More Help
 
 Please consult the [wiki](https://github.com/jmarkman/Neocities.NET/wiki) for more in-depth information about using this tool.
+
+## Contributing
+
+Please consult the [Contributing](https://github.com/jmarkman/Neocities.NET/wiki/Contributing) page on the wiki.
