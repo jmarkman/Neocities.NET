@@ -49,6 +49,7 @@ namespace NeocitiesNET.AccountInteraction
         /// <param name="accountName">The name of the account to delete</param>
         public bool DeleteAccount(string accountName)
         {
+            Console.WriteLine($"Deleting '{accountName}' from the list of accounts");
             return _accountManager.DeleteAccount(accountName);
         }
 
@@ -67,6 +68,7 @@ namespace NeocitiesNET.AccountInteraction
         /// <returns><see cref="true"/> if the operation was successful, <see cref="false"/> otherwise</returns>
         public bool SetActiveAccount(string accountName)
         {
+            Console.WriteLine($"Setting '{accountName}' as the active account");
             return _accountManager.SetFirstAccount(accountName);
         }
 
